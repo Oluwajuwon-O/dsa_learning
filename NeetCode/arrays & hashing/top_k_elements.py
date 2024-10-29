@@ -3,8 +3,8 @@
 # Output: [2,3]
 from typing import List
 
-# nums = [3,3,2,2,2,1]
-nums = [1,2]
+nums = [5,5,5,5,6,3,3,3,2,2,2,1]
+# nums = [1,2]
 k = 2
 # nums = reversed(nums)
 h = {}
@@ -32,21 +32,50 @@ h = {}
 #     freq = sorted(h.keys(), reverse= True)[:k]
 #     return [h[req] for req in freq]
 
-def get_key_by_value(dictionary, target_value):
-    return next(key for key, value in dictionary.items() if value == target_value)
+# class Solution:
+#     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
-# Example dictionary
-fruits = {
-    "apple": "red",
-    "banana": "yellow",
-    "grape": "purple",
-    "lime": "green"
-}
+freq_table = {}
+for num in nums:
+    freq_table[num] = 1 + freq_table.get(num, 0)
 
-# Find the key for the value "yellow"
-fruit_name = get_key_by_value(fruits, "yellow")
-print(f"The fruit that is yellow is: {fruit_name}")
+print(freq_table)
 
-# Find the key for the value "green"
-fruit_name = get_key_by_value(fruits, "green")
-print(f"The fruit that is green is: {fruit_name}")
+bucket = [[] for i in range(len(nums) + 1)]
+print(bucket)
+
+for num, freq in freq_table.items():
+    bucket[freq].append(num)
+print(bucket)
+
+result = []
+for i in range(len(bucket)-1, 0, -1):
+    for j in bucket[i]:
+        result.append(j)
+        if len(result) == k:
+            print(result)
+            break
+        
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        freq_table = {}
+        for num in nums:
+            freq_table[num] = 1 + freq_table.get(num, 0)
+            
+        bucket = [[] for i in range(len(nums) + 1)]
+
+        for num, freq in freq_table.items():
+            bucket[freq].append(num)
+
+        result = []
+        for i in range(len(bucket)-1, 0, -1):
+            for j in bucket[i]:
+                result.append(j)
+                if len(result) == k:
+                    return result
+                    break
+
+print(Solution.topKFrequent(nums, k))
+                
